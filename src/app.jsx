@@ -1,10 +1,12 @@
-import React from 'react';
-import { render } from 'react-dom';
+import React from 'react'
+import './App.css';
 
-import 'react-select/dist/react-select.css';
+function App() {
+  return (
+    <div className="App">
+      Ку
+    </div>
+  );
+}
 
-render(
-    <div>
-        Place your application here
-    </div>,
-    document.getElementById('app-root'));
+export default App;
