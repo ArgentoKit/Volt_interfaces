@@ -1,13 +1,37 @@
 const graphql = require('graphql')
+const mongoose = require('mongoose');
 
-const { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLSchema } = graphql
+const { GraphQLObjectType, GraphQLString, GraphQLFloat, GraphQLSchema, GraphQLID, GraphQLList } = graphql
 
-const ProductsType = new GraphQLObjectType({
-    name: 'Products',
+mongoose.connect('mongodb+srv://argento:<newcommuna2021>@first-cluster.16ypa.mongodb.net/volr-interfaces?retryWrites=true&w=majority', {
+    useNewUrlParser: true, 
+    useUnifiedTopology: true
+});
+
+const products = []
+const customers = []
+
+const ProductType = new GraphQLObjectType({
+    name: 'Product',
     fields: () => ({
-        id: { type: GraphQLString },
+        id: { type: GraphQLID },
         name: { type: GraphQLString },
-        price: { type: GraphQLInt }
+        price: { type: GraphQLFloat }
+    })
+})
+const CustomerType = new GraphQLObjectType({
+    name: 'Customer',
+    fields: () => ({
+        id: { type: GraphQLID },
+        name: { type: GraphQLString },
+        address: { type: GraphQLString },
+        phone: { type: GraphQLString },
+        products: {
+            type: new GraphQLList(ProductType),
+            resolve(parent, args) {
+                //return products.filter(product => product.customerId === parent.id)
+            }
+        }
     })
 })
 
@@ -15,10 +39,29 @@ const Query = new GraphQLObjectType({
     name: 'Query',
     fields: {
         product: {
-            type: ProductsType,
-            args: { id: { type: GraphQLString } },
+            type: ProductType,
+            args: { id: { type: GraphQLID } },
             resolve(parent, args) {
-
+                //return products.find(prod => prod.id == args.id)
+            }
+        },
+        customer: {
+            type: CustomerType,
+            args: { id: { type: GraphQLID } },
+            resolve(parent, args) {
+                //return customers.find(customer => customer.id == args.id)
+            }
+        },
+        products: {
+            type: new GraphQLList(ProductType),
+            resolve(parent, args) {
+                return products
+            }
+        },
+        customers: {
+            type: new GraphQLList(CustomerType),
+            resolve(parent, args) {
+                return customers
             }
         }
     }
