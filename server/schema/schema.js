@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const { GraphQLObjectType, GraphQLString, GraphQLFloat, GraphQLSchema, GraphQLID, GraphQLList } = graphql
 
-mongoose.connect('mongodb+srv://argento:<newcommuna2021>@first-cluster.16ypa.mongodb.net/volr-interfaces?retryWrites=true&w=majority', {
+mongoose.connect('', {
     useNewUrlParser: true, 
     useUnifiedTopology: true
 });
