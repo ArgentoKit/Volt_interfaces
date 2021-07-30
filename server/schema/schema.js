@@ -6,6 +6,7 @@ const { GraphQLObjectType, GraphQLString, GraphQLFloat, GraphQLSchema, GraphQLID
 const Products = require('../models/product')
 const Customers = require('../models/customer')
 const Invoices = require('../models/invoice')
+const Invoice_Items = require('../models/invoice-items')
 
 const ProductType = new GraphQLObjectType({
     name: 'Product',
@@ -27,10 +28,19 @@ const CustomerType = new GraphQLObjectType({
 const InvoiceType = new GraphQLObjectType({
     name: 'Invoice',
     fields: () => ({
-        id: {type: GraphQLID},
-        customer_id: {type: GraphQLID},
-        discount: {type: GraphQLInt},
-        total: {type: GraphQLFloat}
+        id: { type: GraphQLID },
+        customer_id: { type: GraphQLID },
+        discount: { type: GraphQLFloat },
+        total: { type: GraphQLFloat }
+    })
+})
+const InvoiceItemType = new GraphQLObjectType({
+    name: 'InvoiceItem',
+    fields: () => ({
+        id: { type: GraphQLID },
+        invoice_id: { type: GraphQLID },
+        product_id: { type: GraphQLID },
+        quantity: { type: GraphQLInt }
     })
 })
 
@@ -53,6 +63,29 @@ const Mutation = new GraphQLObjectType({
                 return customer.save()
             }
         },
+        updateCustomer: {
+            type: CustomerType,
+            args: {
+                id: { type: GraphQLID },
+                name: { type: GraphQLString },
+                address: { type: GraphQLString },
+                phone: { type: GraphQLString },
+            },
+            resolve(parent, args) {
+                return Customers.findByIdAndUpdate(
+                    args.id,
+                    { $set: { name: args.name, address: args.address, phone: args.phone } },
+                    { new: true }
+                )
+            }
+        },
+        deleteCustomer: {
+            type: CustomerType,
+            args: { id: { type: GraphQLID } },
+            resolve(parent, args) {
+                return Customers.findByIdAndDelete(args.id)
+            }
+        },
         addProduct: {
             type: ProductType,
             args: {
@@ -66,7 +99,60 @@ const Mutation = new GraphQLObjectType({
                 })
                 return product.save()
             }
-        }
+        },
+        deleteProduct: {
+            type: ProductType,
+            args: { id: { type: GraphQLID } },
+            resolve(parent, args) {
+                return Products.findByIdAndDelete(args.id)
+            }
+        },
+        addInvoice: {
+            type: InvoiceType,
+            args: {
+                customer_id: { type: GraphQLID },
+                discount: { type: GraphQLFloat },
+                total: { type: GraphQLFloat }
+            },
+            resolve(parent, args) {
+                const invoice = new Invoices({
+                    customer_id: args.customer_id,
+                    discount: args.discount,
+                    total: args.total
+                })
+                return invoice.save()
+            }
+        },
+        deleteInvoice: {
+            type: InvoiceType,
+            args: { id: { type: GraphQLID } },
+            resolve(parent, args) {
+                return Invoices.findByIdAndDelete(args.id)
+            }
+        },
+        addInvoiceItem: {
+            type: InvoiceItemType,
+            args: {
+                invoice_id: { type: GraphQLID },
+                product_id: { type: GraphQLID },
+                quantity: { type: GraphQLInt }
+            },
+            resolve(parent, args) {
+                const invoice_item = new Invoice_Items({
+                    invoice_id: args.invoice_id,
+                    product_id: args.product_id,
+                    quantity: args.quantity
+                })
+                return invoice_item.save()
+            }
+        },
+        deleteInvoiceItem: {
+            type: InvoiceItemType,
+            args: { id: { type: GraphQLID } },
+            resolve(parent, args) {
+                return Invoice_Items.findByIdAndDelete(args.id)
+            }
+        },
     }
 })
 
@@ -101,7 +187,7 @@ const Query = new GraphQLObjectType({
         },
         invoice: {
             type: InvoiceType,
-            args: { id: {type: GraphQLID} },
+            args: { id: { type: GraphQLID } },
             resolve(parent, args) {
                 return Invoices.findById(args.id)
             }
@@ -111,7 +197,20 @@ const Query = new GraphQLObjectType({
             resolve(parent, args) {
                 return Invoices.find({})
             }
-        }
+        },
+        invoiceItem: {
+            type: InvoiceItemType,
+            args: { id: { type: GraphQLID } },
+            resolve(parent, args) {
+                return Invoice_Items.findById(args.id)
+            }
+        },
+        invoice_Items: {
+            type: new GraphQLList(InvoiceItemType),
+            resolve(parent, args) {
+                return Invoice_Items.find({})
+            }
+        },
     }
 })
 
