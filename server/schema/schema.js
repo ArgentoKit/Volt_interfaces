@@ -100,6 +100,21 @@ const Mutation = new GraphQLObjectType({
                 return product.save()
             }
         },
+        updateProduct: {
+            type: ProductType,
+            args: {
+                id: { type: GraphQLID },
+                name: { type: GraphQLString },
+                price: { type: GraphQLFloat },
+            },
+            resolve(parent, args) {
+                return Products.findByIdAndUpdate(
+                    args.id,
+                    { $set: { name: args.name, price: args.price } },
+                    { new: true }
+                )
+            }
+        },
         deleteProduct: {
             type: ProductType,
             args: { id: { type: GraphQLID } },
@@ -123,6 +138,22 @@ const Mutation = new GraphQLObjectType({
                 return invoice.save()
             }
         },
+        updateInvoice: {
+            type: InvoiceType,
+            args: {
+                id: { type: GraphQLID },
+                customer_id: { type: GraphQLID },
+                discount: { type: GraphQLFloat },
+                total: { type: GraphQLFloat }
+            },
+            resolve(parent, args) {
+                return Invoices.findByIdAndUpdate(
+                    args.id,
+                    { $set: { customer_id: args.customer_id, discount: args.discount, total: args.total, } },
+                    { new: true }
+                )
+            }
+        },
         deleteInvoice: {
             type: InvoiceType,
             args: { id: { type: GraphQLID } },
@@ -144,6 +175,22 @@ const Mutation = new GraphQLObjectType({
                     quantity: args.quantity
                 })
                 return invoice_item.save()
+            }
+        },
+        updateInvoiceItem: {
+            type: InvoiceItemType,
+            args: {
+                id: { type: GraphQLID },
+                invoice_id: { type: GraphQLID },
+                product_id: { type: GraphQLID },
+                quantity: { type: GraphQLInt }
+            },
+            resolve(parent, args) {
+                return Invoice_Items.findByIdAndUpdate(
+                    args.id,
+                    { $set: { invoice_id: args.invoice_id, product_id: args.product_id, quantity: args.quantity, } },
+                    { new: true }
+                )
             }
         },
         deleteInvoiceItem: {
