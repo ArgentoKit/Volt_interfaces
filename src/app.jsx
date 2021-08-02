@@ -1,12 +1,23 @@
+import { MuiThemeProvider } from '@material-ui/core';
 import React from 'react'
-import './App.css';
+import Header from './components/Header/Header';
+import Products from './components/Products/Products';
+import { graphql } from 'react-apollo';
+import { productsQuery } from './components/Products/queries'
 
-function App() {
+
+function App(props) {
   return (
     <div className="App">
-      Ку
+      <MuiThemeProvider>
+        <Header />
+        <Products />
+        {console.log(props)}
+      </MuiThemeProvider>
     </div>
   );
 }
 
-export default App;
+const AppWithData = graphql(productsQuery)(App)
+
+export default AppWithData;
