@@ -209,8 +209,8 @@ const Query = new GraphQLObjectType({
         product: {
             type: ProductType,
             args: { id: { type: GraphQLID } },
-            resolve(parent, args) {
-                return Products.findById(args.id)
+            async resolve(parent, args) {
+                return await Products.findById(args.id)
             }
         },
         customer: {
@@ -222,8 +222,8 @@ const Query = new GraphQLObjectType({
         },
         products: {
             type: new GraphQLList(ProductType),
-            resolve(parent, args) {
-                return Products.find({})
+            async resolve(parent, args) {
+                return await Products.find({})
             }
         },
         customers: {

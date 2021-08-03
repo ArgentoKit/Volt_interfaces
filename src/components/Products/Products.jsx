@@ -1,6 +1,7 @@
 import { Button, makeStyles } from '@material-ui/core'
 import React from 'react'
 import ProductTable from './Table/Table'
+import withHoc from './ProductsHoc'
 
 const useStyles = makeStyles({
     container: {
@@ -18,17 +19,21 @@ const useStyles = makeStyles({
     }
 })
 
-const Products = () => {
+const Products = ({data, ...props}) => {
     const classes = useStyles()
+    const products = data.products
     return (
-        <div className={classes.container}>
-            <h2 className={classes.title}>Products</h2>
-            <Button classes={{root: classes.create}} variant="outlined">
-                Create
-            </Button>
-            <ProductTable />
-        </div>
+        <>
+        {products === undefined ? <></> 
+        :  <div className={classes.container}>
+                <h2 className={classes.title}>Products</h2>
+                <Button classes={{ root: classes.create }} variant="outlined">
+                    Create
+                </Button>
+                <ProductTable products={products} />
+            </div>}
+        </>
     )
 }
 
-export default Products
+export default withHoc(Products)
