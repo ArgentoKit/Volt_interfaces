@@ -1,15 +1,14 @@
 import { MuiThemeProvider } from '@material-ui/core';
 import React from 'react'
 import Header from './components/Header/Header';
-import Products from './components/Products/Products';
-import { graphql } from 'react-apollo';
+import Main from './components/Main/Main'
 
 const App = () => {
   return (
     <div className="App">
       <MuiThemeProvider>
         <Header />
-        <Products />
+        <Main />
       </MuiThemeProvider>
     </div>
   );

@@ -1,11 +1,11 @@
 import React from 'react'
 import { Button, makeStyles } from '@material-ui/core'
-import ProductTable from './Table/Table'
-import withHoc from './ProductsHoc'
+import withHoc from './InvoicesHoc'
+import InvoicesTable from './Table'
 
 const useStyles = makeStyles({
     container: {
-        maxWidth: '800px',
+        maxWidth: '1050px',
         margin: '0 auto',
     },
     title: {
@@ -19,21 +19,22 @@ const useStyles = makeStyles({
     }
 })
 
-const Products = ({data, ...props}) => {
+const Invoices = ({data, ...props}) => {
     const classes = useStyles()
-    const products = data.products
+    const invoices = data.invoices
     return (
         <>
-        {products === undefined ? <></> 
+        {console.log(data)}
+        {invoices === undefined ? <></> 
         :  <div className={classes.container}>
-                <h2 className={classes.title}>Products</h2>
+                <h2 className={classes.title}>Invoices</h2>
                 <Button classes={{ root: classes.create }} variant="outlined">
                     Create
                 </Button>
-                <ProductTable products={products} />
+                <InvoicesTable invoices={invoices}/>
             </div>}
         </>
     )
 }
 
-export default withHoc(Products)
+export default withHoc(Invoices)

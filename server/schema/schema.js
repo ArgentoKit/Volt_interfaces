@@ -31,7 +31,13 @@ const InvoiceType = new GraphQLObjectType({
         id: { type: GraphQLID },
         customer_id: { type: GraphQLID },
         discount: { type: GraphQLFloat },
-        total: { type: GraphQLFloat }
+        total: { type: GraphQLFloat },
+        customer: {
+            type: CustomerType,
+            resolve({customer_id}, args) {
+                return Customers.findById(customer_id)
+            }
+        }
     })
 })
 const InvoiceItemType = new GraphQLObjectType({
@@ -209,8 +215,8 @@ const Query = new GraphQLObjectType({
         product: {
             type: ProductType,
             args: { id: { type: GraphQLID } },
-            async resolve(parent, args) {
-                return await Products.findById(args.id)
+            resolve(parent, args) {
+                return Products.findById(args.id)
             }
         },
         customer: {
@@ -222,8 +228,8 @@ const Query = new GraphQLObjectType({
         },
         products: {
             type: new GraphQLList(ProductType),
-            async resolve(parent, args) {
-                return await Products.find({})
+            resolve(parent, args) {
+                return Products.find({})
             }
         },
         customers: {

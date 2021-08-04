@@ -5,6 +5,7 @@ import App from './App';
 import { ApolloProvider } from 'react-apollo';
 import { InMemoryCache } from 'apollo-boost';
 import ApolloClient from 'apollo-boost';
+import { BrowserRouter } from 'react-router-dom';
 
 const client = new ApolloClient({
   uri: 'http://localhost:3005/graphql',
@@ -14,7 +15,9 @@ const client = new ApolloClient({
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')
