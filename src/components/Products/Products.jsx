@@ -5,7 +5,7 @@ import withHoc from './ProductsHoc'
 
 const useStyles = makeStyles({
     container: {
-        maxWidth: '800px',
+        maxWidth: '1050px',
         margin: '0 auto',
     },
     title: {
@@ -24,13 +24,14 @@ const Products = ({data, ...props}) => {
     const products = data.products
     return (
         <>
+        {console.log(props)}
         {products === undefined ? <></> 
         :  <div className={classes.container}>
                 <h2 className={classes.title}>Products</h2>
                 <Button classes={{ root: classes.create }} variant="outlined">
                     Create
                 </Button>
-                <ProductTable products={products} />
+                <ProductTable products={products} deleteProduct={props.deleteProduct}/>
             </div>}
         </>
     )
