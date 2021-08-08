@@ -30,7 +30,7 @@ const useStyles = makeStyles({
     }
 })
 
-const ProductTable = ({ products, deleteProduct }) => {
+const ProductTable = ({ products }) => {
     const [open, setOpen] = React.useState(false);
     const [element, setElement] = React.useState('')
 
@@ -41,9 +41,8 @@ const ProductTable = ({ products, deleteProduct }) => {
     const handleClose = () => {
         setOpen(false)
     }
-    const handleDeleteConfirm = (element) => {
+    const handleDeleteConfirm = () => {
         setOpen(false)
-        deleteProduct(element)
     }
     var id = 0
     const classes = useStyles()

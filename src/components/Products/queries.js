@@ -12,6 +12,8 @@ export const productsQuery = gql`
 
 export const deleteProduct = gql`
     mutation deleteProduct($id: ID) {
-        deleteProduct(id: $id)
+        deleteProduct(id: $id) {
+            id
+        }
     }
 `
