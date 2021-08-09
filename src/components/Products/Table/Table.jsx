@@ -2,7 +2,7 @@ import { makeStyles, Table, TableBody, TableCell, TableHead, TableRow } from '@m
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import CreateIcon from '@material-ui/icons/Create';
 import React from 'react'
-import DeleteCofirm from '../../DeleteConfirm';
+import DeleteCofirm from './DeleteConfirm'
 
 const useStyles = makeStyles({
     id: {
@@ -30,20 +30,21 @@ const useStyles = makeStyles({
     }
 })
 
-const ProductTable = ({ products }) => {
-    const [open, setOpen] = React.useState(false);
+const ProductTable = ({ products, openCreatingForm }) => {
+    const [open, setOpen] = React.useState(false)
     const [element, setElement] = React.useState('')
 
-    const handleDialogOpen = (id) => {
+    const handleDeletingDialog = (id) => {
         setOpen(true)
         setElement(id)
     }
-    const handleClose = () => {
+    const handleCloseDeletingDialog = () => {
         setOpen(false)
     }
     const handleDeleteConfirm = () => {
         setOpen(false)
     }
+
     var id = 0
     const classes = useStyles()
     return (
@@ -65,13 +66,13 @@ const ProductTable = ({ products }) => {
                             <TableCell classes={{ root: classes.price }} align="right">{row.price}</TableCell>
                             <TableCell classes={{ root: classes.action }} align="right">
                                 <CreateIcon classes={{ root: classes.create }} />
-                                <HighlightOffIcon classes={{ root: classes.delete }} onClick={() => handleDialogOpen(row.id)} />
+                                <HighlightOffIcon classes={{ root: classes.delete }} onClick={() => handleDeletingDialog(row.id)} />
                             </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
-            <DeleteCofirm open={open} element={element} handleClose={handleClose} handleDeleteConfirm={handleDeleteConfirm} />
+            <DeleteCofirm open={open} element={element} handleClose={handleCloseDeletingDialog} handleDeleteConfirm={handleDeleteConfirm} />
         </>
     )
 }

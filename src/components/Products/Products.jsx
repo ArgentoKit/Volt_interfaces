@@ -2,6 +2,7 @@ import React from 'react'
 import { Button, makeStyles } from '@material-ui/core'
 import ProductTable from './Table/Table'
 import withHoc from './ProductsHoc'
+import CreateProduct from './CreateProductIDialog'
 
 const useStyles = makeStyles({
     container: {
@@ -19,19 +20,29 @@ const useStyles = makeStyles({
     }
 })
 
-const Products = ({data, ...props}) => {
+const Products = ({data, ...props}) => {    
+    const [openCreatingForm, setOpenCreatingForm] = React.useState(false)
+
     const classes = useStyles()
     const products = data.products
+
+    const handleCreatingForm = () => {
+        setOpenCreatingForm(true)
+    }
+    const handleCloseCreatingForm = () => {
+        setOpenCreatingForm(false)
+    }
+
     return (
         <>
-        {console.log(props)}
         {products === undefined ? <></> 
         :  <div className={classes.container}>
                 <h2 className={classes.title}>Products</h2>
-                <Button classes={{ root: classes.create }} variant="outlined">
+                <Button classes={{ root: classes.create }} onClick={handleCreatingForm} variant="outlined">
                     Create
                 </Button>
-                <ProductTable products={products} deleteProduct={props.deleteProduct}/>
+                <ProductTable products={products}/>
+                <CreateProduct openCreatingForm={ openCreatingForm } handleCloseCreatingForm={ handleCloseCreatingForm }/>
             </div>}
         </>
     )
