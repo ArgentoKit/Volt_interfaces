@@ -51,6 +51,11 @@ const UpdateProduct = ({open, element, name, price, handleClose}) => {
 
     const handleUpdateSubmit = () => {
         handleClose()
+        setProductName('')
+        setProductPrice(0)
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault()
     }
 
     return (
@@ -63,14 +68,14 @@ const UpdateProduct = ({open, element, name, price, handleClose}) => {
             >
                 <DialogTitle classes={{ root: classes.title }} id="alert-dialog-title">{"Редактирование товара"}</DialogTitle>
                 <DialogContent>
-                    <form noValidate autoComplete="off">
+                    <form noValidate autoComplete="off" onSubmit={handleSubmit}>
                         <div className={classes.fieldsBox}>
                             <FormControl variant="outlined" classes={{ root: classes.textField }}>
                                 <InputLabel htmlFor="component-outlined">Name</InputLabel>
                                 <OutlinedInput required autoFocus
                                     id="component-outlined"
                                     name="name"
-                                    defaultValue={name}
+                                    value={name}
                                     onChange={e => setProductName(e.target.value)}
                                     label="Название товара" />
                             </FormControl>
@@ -79,7 +84,7 @@ const UpdateProduct = ({open, element, name, price, handleClose}) => {
                                 <OutlinedInput required
                                     id="component-outlined"
                                     name="price"
-                                    defaultValue={price}
+                                    value={price}
                                     onChange={e => setProductPrice(e.target.value)}
                                     label="Цена товара" />
                             </FormControl>

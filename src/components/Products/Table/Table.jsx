@@ -4,6 +4,7 @@ import CreateIcon from '@material-ui/icons/Create';
 import React from 'react'
 import DeleteCofirm from './DeleteConfirm'
 import UpdateProduct from './UpdateProduct';
+import ReusableTable from '../../ReusableTable'
 
 const useStyles = makeStyles({
     id: {
@@ -58,13 +59,26 @@ const ProductTable = ({ products }) => {
     const handleCloseUpdateDialog = () => {
         setOpenUpdate(false)
         setElement('')
+        setProdName('')
+        setProdPrice(0)
     }
 
     var id = 0
     const classes = useStyles()
+    const titles = ['id', 'Name', 'Price']
     return (
         <>
-            <Table>
+            <ReusableTable titles={titles} items={products} classes={classes}/>
+            <UpdateProduct open={openUpdate} element={element} name={prodName} price={prodPrice} handleClose={handleCloseUpdateDialog}/>
+            <DeleteCofirm open={open} element={element} handleClose={handleCloseDeletingDialog} handleDeleteConfirm={handleDeleteConfirm} />
+        </>
+    )
+}
+
+export default ProductTable
+
+/* 
+<Table>
                 <TableHead>
                     <TableRow>
                         <TableCell classes={{ root: classes.id }}>id</TableCell>
@@ -87,10 +101,4 @@ const ProductTable = ({ products }) => {
                     ))}
                 </TableBody>
             </Table>
-            <UpdateProduct open={openUpdate} element={element} name={prodName} price={prodPrice} handleClose={handleCloseUpdateDialog}/>
-            <DeleteCofirm open={open} element={element} handleClose={handleCloseDeletingDialog} handleDeleteConfirm={handleDeleteConfirm} />
-        </>
-    )
-}
-
-export default ProductTable
+*/
