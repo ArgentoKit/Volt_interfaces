@@ -1,7 +1,7 @@
 import { Button, makeStyles } from '@material-ui/core'
 import React from 'react'
 import withHoc from './CustomersHoc'
-import CustomersTable from './Table'
+import CustomersTable from './CustomersTable'
 
 const useStyles = makeStyles({
     container: {
