@@ -43,19 +43,26 @@ const UPDATE_PRODUCT = gql`
   }
 `
 
-const UpdateProduct = ({open, element, name, price, handleClose}) => {
+const UpdateProduct = ({open, handleClose, item }) => {
     const classes = useStyles()
-    const [productName, setProductName] = useState(name)
-    const [productPrice, setProductPrice] = useState(price)
-    console.log('hi',name, price)
+    const [product, setProduct] = useState({
+        name: item.name,
+        price: item.price
+    })
 
     const handleUpdateSubmit = () => {
         handleClose()
-        setProductName('')
-        setProductPrice(0)
+        setProduct({
+            name: '',
+            price: ''
+        })
     }
-    const handleSubmit = (e) => {
-        e.preventDefault()
+    const handleChange = (e) => {
+        const value = e.target.value
+        setProduct({
+            ...product,
+            [e.target.name]:value
+        })
     }
 
     return (
@@ -68,15 +75,15 @@ const UpdateProduct = ({open, element, name, price, handleClose}) => {
             >
                 <DialogTitle classes={{ root: classes.title }} id="alert-dialog-title">{"Редактирование товара"}</DialogTitle>
                 <DialogContent>
-                    <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+                    <form noValidate autoComplete="off">
                         <div className={classes.fieldsBox}>
                             <FormControl variant="outlined" classes={{ root: classes.textField }}>
                                 <InputLabel htmlFor="component-outlined">Name</InputLabel>
                                 <OutlinedInput required autoFocus
                                     id="component-outlined"
                                     name="name"
-                                    value={name}
-                                    onChange={e => setProductName(e.target.value)}
+                                    value={product.name}
+                                    onChange={handleChange}
                                     label="Название товара" />
                             </FormControl>
                             <FormControl variant="outlined" classes={{ root: classes.textField }}>
@@ -84,8 +91,8 @@ const UpdateProduct = ({open, element, name, price, handleClose}) => {
                                 <OutlinedInput required
                                     id="component-outlined"
                                     name="price"
-                                    value={price}
-                                    onChange={e => setProductPrice(e.target.value)}
+                                    value={product.price}
+                                    onChange={handleChange}
                                     label="Цена товара" />
                             </FormControl>
                         </div>
@@ -95,7 +102,7 @@ const UpdateProduct = ({open, element, name, price, handleClose}) => {
                     <Mutation mutation={UPDATE_PRODUCT}>
                         {mutation => <button className={classes.createButton} onClick={() => {
                             return (
-                                mutation({  variables: { id: element, name: productName, price: Number.parseFloat(productPrice) }, 
+                                mutation({  variables: { id: item.id, name: product.name, price: Number.parseFloat(product.price) }, 
                                             refetchQueries: [{ query: PRODUCTS_QUERY }] }),
                                 handleUpdateSubmit()
                             )

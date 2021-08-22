@@ -1,7 +1,5 @@
-import { makeStyles, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core'
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import CreateIcon from '@material-ui/icons/Create';
-import React from 'react'
+import { makeStyles } from '@material-ui/core'
+import React, { useState } from 'react'
 import DeleteCofirm from './DeleteConfirm'
 import UpdateProduct from './UpdateProduct';
 import ReusableTable from '../../ReusableTable'
@@ -33,50 +31,45 @@ const useStyles = makeStyles({
 })
 
 const ProductTable = ({ products }) => {
-    const [open, setOpen] = React.useState(false)
-    const [openUpdate, setOpenUpdate] = React.useState(false)
-    const [element, setElement] = React.useState('')
-    const [prodName, setProdName] = React.useState('')
-    const [prodPrice, setProdPrice] = React.useState('')
+    const [open, setOpen] = useState(false)
+    const [product, setProduct] = useState({
+        id: '',
+        name: '',
+        price: ''
+    })
 
-    const handleDeletingDialog = (id) => {
+    const setItemData = (row) => {
+        setProduct({
+            id: row.id,
+            name: row.name,
+            price: row.price
+        })
+        openDialog()
+    }
+    const openDialog = () => {
         setOpen(true)
-        setElement(id)
     }
-    const handleCloseDeletingDialog = () => {
-        setOpen(false)
-        setElement(0)
-    }
-    const handleDeleteConfirm = () => {
+    const closeDialog = () => {
         setOpen(false)
     }
-    const handleUpdateDialog = (productId, prodName, prodPrice) => {
-        setElement(productId)
-        setProdName(prodName)
-        setProdPrice(prodPrice)
-        setOpenUpdate(true)
-    }
-    const handleCloseUpdateDialog = () => {
-        setOpenUpdate(false)
-        setElement('')
-        setProdName('')
-        setProdPrice(0)
-    }
+
 
     var id = 0
     const classes = useStyles()
     const titles = ['id', 'Name', 'Price']
     return (
         <>
-            <ReusableTable titles={titles} items={products} classes={classes}/>
-            <UpdateProduct open={openUpdate} element={element} name={prodName} price={prodPrice} handleClose={handleCloseUpdateDialog}/>
-            <DeleteCofirm open={open} element={element} handleClose={handleCloseDeletingDialog} handleDeleteConfirm={handleDeleteConfirm} />
+            <ReusableTable titles={titles} items={products} classes={classes} setItemData={setItemData}/>
+            <UpdateProduct open={open} handleClose={closeDialog} item={product}/>
+            <DeleteCofirm  />
         </>
     )
 }
 
 export default ProductTable
 
+//open={} element={} name={} price={} handleClose={}
+//open={} element={} handleClose={} handleDeleteConfirm={}
 /* 
 <Table>
                 <TableHead>
