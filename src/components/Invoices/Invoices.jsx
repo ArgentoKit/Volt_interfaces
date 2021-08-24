@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, makeStyles } from '@material-ui/core'
 import withHoc from './InvoicesHoc'
-import InvoicesTable from './Table'
+import InvoicesTable from './InvoicesTable'
 
 const useStyles = makeStyles({
     container: {
@@ -24,7 +24,6 @@ const Invoices = ({data, ...props}) => {
     const invoices = data.invoices
     return (
         <>
-        {console.log(data)}
         {invoices === undefined ? <></> 
         :  <div className={classes.container}>
                 <h2 className={classes.title}>Invoices</h2>

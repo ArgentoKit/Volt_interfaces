@@ -1,9 +1,8 @@
-import { makeStyles, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core'
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import CreateIcon from '@material-ui/icons/Create';
+import { makeStyles } from '@material-ui/core'
 import React, { useState } from 'react'
 import DeleteCofirm from './DeleteConfirm'
 import UpdateProduct from './UpdateProduct';
+import ReusableTable from '../../ReusableTable'
 
 const useStyles = makeStyles({
     id: {
@@ -32,40 +31,47 @@ const useStyles = makeStyles({
 })
 
 const ProductTable = ({ products }) => {
-    const [openUpdate, setOpenUpdate] = useState(false)
-    const [openDelete, setOpenDelete] = useState(false)
+    const [open, setOpen] = useState(false)
     const [product, setProduct] = useState({
         id: '',
         name: '',
         price: ''
     })
-    
-    const openDeleteConfirm = (prodId) => {
+
+    const setItemData = (row) => {
         setProduct({
-            ...product,
-            id: prodId
-        })
-        setOpenDelete(true)
-    }
-    const openUpdateDialog = (row) => {
-        setProduct({
-            ...product,
             id: row.id,
             name: row.name,
             price: row.price
         })
-        setOpenUpdate(true)
+        openDialog()
     }
-    const handleClose = () => {
-        setOpenDelete(false)
-        setOpenUpdate(false)
+    const openDialog = () => {
+        setOpen(true)
     }
+    const closeDialog = () => {
+        setOpen(false)
+    }
+
 
     var id = 0
     const classes = useStyles()
+    const titles = ['id', 'Name', 'Price']
     return (
         <>
-            <Table>
+            <ReusableTable titles={titles} items={products} classes={classes} setItemData={setItemData}/>
+            <UpdateProduct open={open} handleClose={closeDialog} item={product}/>
+            <DeleteCofirm  />
+        </>
+    )
+}
+
+export default ProductTable
+
+//open={} element={} name={} price={} handleClose={}
+//open={} element={} handleClose={} handleDeleteConfirm={}
+/* 
+<Table>
                 <TableHead>
                     <TableRow>
                         <TableCell classes={{ root: classes.id }}>id</TableCell>
@@ -81,17 +87,11 @@ const ProductTable = ({ products }) => {
                             <TableCell classes={{ root: classes.name }} align="right">{row.name}</TableCell>
                             <TableCell classes={{ root: classes.price }} align="right">{row.price}</TableCell>
                             <TableCell classes={{ root: classes.action }} align="right">
-                                <CreateIcon classes={{ root: classes.create }} onClick={() => openUpdateDialog(row)}/>
-                                <HighlightOffIcon classes={{ root: classes.delete }} onClick={() => openDeleteConfirm(row.id)} />
+                                <CreateIcon classes={{ root: classes.create }} onClick={() => handleUpdateDialog(row.id, row.name, row.price)}/>
+                                <HighlightOffIcon classes={{ root: classes.delete }} onClick={() => handleDeletingDialog(row.id)} />
                             </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
-            <UpdateProduct open={openUpdate} handleClose={handleClose} item={product}/>
-            <DeleteCofirm open={openDelete} id={product.id} handleClose={handleClose}/>
-        </>
-    )
-}
-
-export default ProductTable
+*/

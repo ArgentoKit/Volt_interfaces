@@ -43,18 +43,20 @@ const UPDATE_PRODUCT = gql`
   }
 `
 
-const UpdateProduct = ({ open, handleClose, item }) => {
+const UpdateProduct = ({open, handleClose, item }) => {
     const classes = useStyles()
     const [product, setProduct] = useState({
-        id: item.id,
         name: item.name,
         price: item.price
     })
 
     const handleUpdateSubmit = () => {
         handleClose()
+        setProduct({
+            name: '',
+            price: ''
+        })
     }
-
     const handleChange = (e) => {
         const value = e.target.value
         setProduct({
@@ -100,10 +102,8 @@ const UpdateProduct = ({ open, handleClose, item }) => {
                     <Mutation mutation={UPDATE_PRODUCT}>
                         {mutation => <button className={classes.createButton} onClick={() => {
                             return (
-                                mutation({
-                                    variables: { id: item.id, name: product.name, price: Number.parseFloat(product.price) },
-                                    refetchQueries: [{ query: PRODUCTS_QUERY }]
-                                }),
+                                mutation({  variables: { id: item.id, name: product.name, price: Number.parseFloat(product.price) }, 
+                                            refetchQueries: [{ query: PRODUCTS_QUERY }] }),
                                 handleUpdateSubmit()
                             )
                         }}>Подтвердить</button>}

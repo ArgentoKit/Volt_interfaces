@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, makeStyles } from '@material-ui/core'
-import ProductTable from './Table/Table'
+import ProductTable from './Table/ProductTable'
 import withHoc from './ProductsHoc'
 import CreateProduct from './CreateProductIDialog'
 
