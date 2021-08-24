@@ -1,7 +1,7 @@
 import { makeStyles, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import CreateIcon from '@material-ui/icons/Create';
-import React from 'react'
+import React, { useState } from 'react'
 import DeleteCofirm from './DeleteConfirm'
 import UpdateProduct from './UpdateProduct';
 
@@ -32,32 +32,33 @@ const useStyles = makeStyles({
 })
 
 const ProductTable = ({ products }) => {
-    const [open, setOpen] = React.useState(false)
-    const [openUpdate, setOpenUpdate] = React.useState(false)
-    const [element, setElement] = React.useState('')
-    const [prodName, setProdName] = React.useState('')
-    const [prodPrice, setProdPrice] = React.useState('')
-
-    const handleDeletingDialog = (id) => {
-        setOpen(true)
-        setElement(id)
+    const [openUpdate, setOpenUpdate] = useState(false)
+    const [openDelete, setOpenDelete] = useState(false)
+    const [product, setProduct] = useState({
+        id: '',
+        name: '',
+        price: ''
+    })
+    
+    const openDeleteConfirm = (prodId) => {
+        setProduct({
+            ...product,
+            id: prodId
+        })
+        setOpenDelete(true)
     }
-    const handleCloseDeletingDialog = () => {
-        setOpen(false)
-        setElement(0)
-    }
-    const handleDeleteConfirm = () => {
-        setOpen(false)
-    }
-    const handleUpdateDialog = (productId, prodName, prodPrice) => {
-        setElement(productId)
-        setProdName(prodName)
-        setProdPrice(prodPrice)
+    const openUpdateDialog = (row) => {
+        setProduct({
+            ...product,
+            id: row.id,
+            name: row.name,
+            price: row.price
+        })
         setOpenUpdate(true)
     }
-    const handleCloseUpdateDialog = () => {
+    const handleClose = () => {
+        setOpenDelete(false)
         setOpenUpdate(false)
-        setElement('')
     }
 
     var id = 0
@@ -80,15 +81,15 @@ const ProductTable = ({ products }) => {
                             <TableCell classes={{ root: classes.name }} align="right">{row.name}</TableCell>
                             <TableCell classes={{ root: classes.price }} align="right">{row.price}</TableCell>
                             <TableCell classes={{ root: classes.action }} align="right">
-                                <CreateIcon classes={{ root: classes.create }} onClick={() => handleUpdateDialog(row.id, row.name, row.price)}/>
-                                <HighlightOffIcon classes={{ root: classes.delete }} onClick={() => handleDeletingDialog(row.id)} />
+                                <CreateIcon classes={{ root: classes.create }} onClick={() => openUpdateDialog(row)}/>
+                                <HighlightOffIcon classes={{ root: classes.delete }} onClick={() => openDeleteConfirm(row.id)} />
                             </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
-            <UpdateProduct open={openUpdate} element={element} name={prodName} price={prodPrice} handleClose={handleCloseUpdateDialog}/>
-            <DeleteCofirm open={open} element={element} handleClose={handleCloseDeletingDialog} handleDeleteConfirm={handleDeleteConfirm} />
+            <UpdateProduct open={openUpdate} handleClose={handleClose} item={product}/>
+            <DeleteCofirm open={openDelete} id={product.id} handleClose={handleClose}/>
         </>
     )
 }

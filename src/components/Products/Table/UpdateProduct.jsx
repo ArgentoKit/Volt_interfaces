@@ -43,14 +43,24 @@ const UPDATE_PRODUCT = gql`
   }
 `
 
-const UpdateProduct = ({open, element, name, price, handleClose}) => {
+const UpdateProduct = ({ open, handleClose, item }) => {
     const classes = useStyles()
-    const [productName, setProductName] = useState(name)
-    const [productPrice, setProductPrice] = useState(price)
-    console.log('hi',name, price)
+    const [product, setProduct] = useState({
+        id: item.id,
+        name: item.name,
+        price: item.price
+    })
 
     const handleUpdateSubmit = () => {
         handleClose()
+    }
+
+    const handleChange = (e) => {
+        const value = e.target.value
+        setProduct({
+            ...product,
+            [e.target.name]:value
+        })
     }
 
     return (
@@ -70,8 +80,8 @@ const UpdateProduct = ({open, element, name, price, handleClose}) => {
                                 <OutlinedInput required autoFocus
                                     id="component-outlined"
                                     name="name"
-                                    defaultValue={name}
-                                    onChange={e => setProductName(e.target.value)}
+                                    value={product.name}
+                                    onChange={handleChange}
                                     label="Название товара" />
                             </FormControl>
                             <FormControl variant="outlined" classes={{ root: classes.textField }}>
@@ -79,8 +89,8 @@ const UpdateProduct = ({open, element, name, price, handleClose}) => {
                                 <OutlinedInput required
                                     id="component-outlined"
                                     name="price"
-                                    defaultValue={price}
-                                    onChange={e => setProductPrice(e.target.value)}
+                                    value={product.price}
+                                    onChange={handleChange}
                                     label="Цена товара" />
                             </FormControl>
                         </div>
@@ -90,8 +100,10 @@ const UpdateProduct = ({open, element, name, price, handleClose}) => {
                     <Mutation mutation={UPDATE_PRODUCT}>
                         {mutation => <button className={classes.createButton} onClick={() => {
                             return (
-                                mutation({  variables: { id: element, name: productName, price: Number.parseFloat(productPrice) }, 
-                                            refetchQueries: [{ query: PRODUCTS_QUERY }] }),
+                                mutation({
+                                    variables: { id: item.id, name: product.name, price: Number.parseFloat(product.price) },
+                                    refetchQueries: [{ query: PRODUCTS_QUERY }]
+                                }),
                                 handleUpdateSubmit()
                             )
                         }}>Подтвердить</button>}

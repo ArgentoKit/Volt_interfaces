@@ -53,7 +53,7 @@ const productRemoved = (client, { data }) => {
     }
 }
 
-const DeleteCofirm = ({ open, element, handleClose, handleDeleteConfirm }) => {
+const DeleteCofirm = ({ open, id, handleClose, handleDeleteConfirm }) => {
     const classes = useStyles()
     return (
         <div>
@@ -74,8 +74,8 @@ const DeleteCofirm = ({ open, element, handleClose, handleDeleteConfirm }) => {
                     <Mutation mutation={DELETE_PRODUCT_MUTATION} update={productRemoved}>
                         {mutation => <button className={cn(classes.button, classes.agree)} onClick={() => {
                             return (
-                                mutation({ variables: { id: element }, refetchQueries: [{ query: PRODUCTS_QUERY }] }),
-                                handleDeleteConfirm()
+                                mutation({ variables: { id: id }, refetchQueries: [{ query: PRODUCTS_QUERY }] }),
+                                handleClose()
                             )
                         }} autoFocus>Agree</button>}
                     </Mutation>
